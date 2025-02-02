@@ -1,6 +1,7 @@
 from typing import Dict, List
 from functions import extractCoeficients, ecRepr, solsRepr
 from colorama import Fore
+from graph import graph
 
 
 def find_roots(coef: List[int]) -> List[int]:
@@ -32,9 +33,9 @@ def main() -> int:
     ecStr: str = input(
         f"{Fore.BLUE}Ingrese una ecuación:\n\
 {Fore.YELLOW}Ej. {Fore.YELLOW}\"{Fore.LIGHTCYAN_EX}1, 2, 3{Fore.YELLOW}\" -> \"{Fore.LIGHTCYAN_EX}x² + 2x + 3{Fore.YELLOW}\"\n\
-  {Fore.LIGHTGREEN_EX}>> {Fore.LIGHTCYAN_EX}")
-    print(Fore.RESET, end="")
-    # ? ecStr: str = "1 -1 -4 4"
+{Fore.LIGHTGREEN_EX}>> {Fore.LIGHTCYAN_EX}")
+    print(Fore.RESET)
+    # ecStr: str = "1 -1 -4 4"
 
     try:
         coefDict: Dict[str, int] = extractCoeficients(ecStr)
@@ -45,10 +46,14 @@ def main() -> int:
         print(f"{Fore.BLUE}La ecuación:\n{Fore.LIGHTRED_EX + ecRepr(coef)}")
         if not roots:
             print(Fore.RED + "No tiene soluciones.")
+
         else:
             print(Fore.BLUE + f"Tiene {len(roots)} solución(es):\n\
 {solsRepr(roots)}")
+            graph(coef, roots)
+
         print(Fore.RESET, end="")
+
     except Exception as e:
         print(f"Error: {Fore.RED + str(e) + Fore.RESET}.")
         return 1

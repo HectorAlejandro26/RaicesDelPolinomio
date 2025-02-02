@@ -39,6 +39,8 @@ def ecRepr(coef: Sequence[int]) -> str:
         # Exponente
         if i < len(coef) - 2:
             output.append(toExp(len(coef) - i - 1) + " ")
+        elif i < len(coef) - 1:
+            output.append(" ")
 
     return "".join(output)
 

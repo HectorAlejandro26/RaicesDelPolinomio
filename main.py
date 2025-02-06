@@ -1,63 +1,40 @@
-from typing import Dict, List
-from functions import extractCoeficients, ecRepr, solsRepr
-from colorama import Fore
-from graph import graph
-
-
-def find_roots(coef: List[int]) -> List[int]:
-    """Encuentra las raíces enteras de un polinomio."""
-    if not coef:
-        return []
-
-    last_coef = coef[-1]
-    if last_coef == 0:
-        return [0]
-
-    divisors = [div for div in range(
-        1, abs(last_coef) + 1) if last_coef % div == 0]
-    divisors.extend([-div for div in divisors])
-    divisors.sort()
-
-    roots = []
-    for d in divisors:
-        aux = coef[0]
-        for c in coef[1:]:
-            aux = aux * d + c
-        if aux == 0:
-            roots.append(d)
-    return roots
+from methods import find_roots
+from pretty_functions import extract_coeficients, eq_repr, graph, sols_repr
+from colorama import Fore as F
+from typing import List
 
 
 def main() -> int:
     """Programa principal"""
     ecStr: str = input(
-        f"{Fore.BLUE}Ingrese una ecuación:\n\
-{Fore.YELLOW}Ej. {Fore.YELLOW}\"{Fore.LIGHTCYAN_EX}1, 2, 3{Fore.YELLOW}\" -> \"{Fore.LIGHTCYAN_EX}x² + 2x + 3{Fore.YELLOW}\"\n\
-{Fore.LIGHTGREEN_EX}>> {Fore.LIGHTCYAN_EX}")
-    print(Fore.RESET)
+        f"{F.BLUE}Ingrese una ecuación:\n\
+{F.YELLOW}Ej. {F.YELLOW}\"{F.LIGHTCYAN_EX}1, 2, 3{F.YELLOW}\" -> \"{F.LIGHTCYAN_EX}x² + 2x + 3{F.YELLOW}\"\n\
+{F.LIGHTGREEN_EX}>> {F.LIGHTCYAN_EX}")
+    print(F.RESET)
     # ecStr: str = "1 -1 -4 4"
 
-    try:
-        coefDict: Dict[str, int] = extractCoeficients(ecStr)
-        coef: List[int] = list(coefDict.values())
+    coefs: List[int] = list(extract_coeficients(ecStr).values())
 
-        roots = find_roots(coef)
+    roots = find_roots(coefs)
+    print(f"{F.BLUE}La ecuación:\n{F.LIGHTRED_EX + eq_repr(coefs)}")
+    if not roots:
+        print(F.RED + "No tiene soluciones.")
 
-        print(f"{Fore.BLUE}La ecuación:\n{Fore.LIGHTRED_EX + ecRepr(coef)}")
-        if not roots:
-            print(Fore.RED + "No tiene soluciones.")
+    else:
+        print(F.BLUE + f"Tiene {len(roots)} solución(es):\n\
+{sols_repr(roots)}")
+        graph(coefs, roots)
 
-        else:
-            print(Fore.BLUE + f"Tiene {len(roots)} solución(es):\n\
-{solsRepr(roots)}")
-            graph(coef, roots)
+        print(F.RESET, end="")
 
-        print(Fore.RESET, end="")
-
-    except Exception as e:
-        print(f"Error: {Fore.RED + str(e) + Fore.RESET}.")
-        return 1
     return 0
+
+
+def __main_test__():
+    a = [2, 9, 13, 6]
+    b = [1, 0, -3]
+    c = [1, 1, -2, -1, 1]
+    print(find_roots(c))
 
 
 if __name__ == "__main__":

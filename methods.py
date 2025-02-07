@@ -13,14 +13,22 @@ def ruffini(coefs: Sequence[int], r) -> Sequence[int]:
         return None
 
 
-def general_eq(coefs: Sequence[int]) -> List[float]:
+def general_eq(coefs: Sequence[int], cmplx: bool = False) -> Union[List[Union[float, complex]], None]:
     """Calcula la ecuacion general para los 3 coeficientes dados."""
     assert len(coefs) == 3
     a, b, c = coefs
-    r = (b**2 - 4 * a * c) ** 0.5
+    sqrt = (b**2 - 4 * a * c) ** 0.5
     d = 2 * a
+    r1 = (-b + sqrt) / d
+    r2 = (-b - sqrt) / d
 
-    return (-b + r) / d, (-b - r) / d
+    r = []
+
+    if isinstance(r1, complex) and cmplx:
+        r.append(r1)
+    if isinstance(r2, complex) and cmplx:
+        r.append(r2)
+    return r if r else None
 
 
 def find_roots(coefs: Sequence[int]) -> List[Union[int, float]]:
@@ -56,7 +64,9 @@ def find_roots(coefs: Sequence[int]) -> List[Union[int, float]]:
 
             # * Aplicar formula general en caso de cuadratica
         if len(coefs) == 3:
-            roots.extend(general_eq(coefs))
+            gnrl_eq_res = general_eq(coefs, False)
+            if gnrl_eq_res is not None:
+                roots.extend(gnrl_eq_res)
             break
 
         if not finded:

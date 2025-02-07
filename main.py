@@ -25,7 +25,7 @@ def main() -> int:
 {sols_repr(roots)}")
         graph(coefs, roots)
 
-        print(F.RESET, end="")
+    print(F.RESET, end="")
 
     return 0
 

@@ -24,10 +24,16 @@ def general_eq(coefs: Sequence[int], cmplx: bool = False) -> Union[List[Union[fl
 
     r = []
 
-    if isinstance(r1, complex) and cmplx:
+    if not isinstance(r1, complex):
         r.append(r1)
-    if isinstance(r2, complex) and cmplx:
+    elif cmplx:
+        r.append(r1)
+
+    if not isinstance(r2, complex):
         r.append(r2)
+    elif cmplx:
+        r.append(r2)
+
     return r if r else None
 
 
@@ -73,4 +79,4 @@ def find_roots(coefs: Sequence[int]) -> List[Union[int, float]]:
             break  # ? no se encontraron mas
 
     roots.sort()  # ? Simple presentacion
-    return roots
+    return list(set(roots))  # ? Conversion por si existen duplicados
